@@ -3,9 +3,14 @@ package gameStart;
 import java.util.Random;
 import java.util.Scanner;
 
+import intF.MissileCenter;
+
 public class GameRoom {
 	
 	MonRoom mr = null;
+	MissileCenter mc = new MissileCenter(); //·¹º§¿¡ µû¸¥ ¹Ì»çÀÏ °ü¸®°´Ã¼
+	int myPoint = 0;  //³ªÀÇÁ¡¼ö
+	int levelOne = 5;  //·¹º§2°¡ µÇ±â À§ÇÑ ±âÁØÁ¡¼ö
 	
 	GameRoom(){
 		init();
@@ -22,7 +27,6 @@ public class GameRoom {
 	}
 
 	private void attackMon() {
-		// TODO Auto-generated method stub
 		new Thread(new Runnable() {
 			
 			@Override
@@ -31,8 +35,19 @@ public class GameRoom {
 				while(true) {
 					int killNum = in.nextInt();
 					if(killNum > 0 && killNum < 10) {
-						int killcnt = mr.killMon(killNum);
-						System.out.println(">> "+killcnt+" ì‚­ì œ");
+						int attPower;
+						if(myPoint <= levelOne) {
+							//·¹º§1 ¹«±â
+							attPower = mc.setMissile("t1");
+						}else {
+							attPower = mc.setMissile("t2");
+						}
+						for(int i = 0; i < attPower; i++ ) {
+							int killcnt = mr.killMon(killNum);
+							myPoint += killcnt;
+							System.out.println(">> "+killcnt+" »èÁ¦ / Á¡¼ö"+ myPoint);
+						}
+						
 					}
 				}
 			}
